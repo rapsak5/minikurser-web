@@ -1,0 +1,30 @@
+# Minikurser
+
+> Minikurser designer og udvikler kurser til virksomheder: fysiske forløb i virksomhedens egne lokaler eller e-læring, medarbejderne tager, når det passer. Priser fra 20.000 kr. ex moms.
+
+Minikurser drives af Berg-Streaming (CVR 40989102), Ove Billes Vej 7, 1., 2300 København S. Kontakt: kontakt@minikurser.dk, +45 24 42 54 25. Senest opdateret 2026-11-07.
+
+Bag Minikurser står Kasper Bergstrøm, læringsspecialist og e-læringskonsulent med baggrund i pædagogik og en kandidat i IT, læring og organisatorisk omstilling. Han har udviklet digital undervisning på Københavns Universitet siden 2020.
+
+## Sider
+- [Forside](https://minikurser.dk/): Kursusforløb og e-læring til virksomheder, arbejdsproces og fagområder.
+- [E-læring](https://minikurser.dk/e-laering.html): Hvad et e-læringskursus indeholder, formater og priser.
+
+## Ydelser
+- **Fysiske forløb**: Workshops på 2 til 3 timer eller forløb over flere gange. Øvelser i tre niveauer på medarbejdernes egne opgaver. Fra 20.000 kr. ex moms.
+- **Online kurser (e-læring)**: Moduler på 5 til 20 minutter med video, lyd, quiz og kursusbevis. Leveres som SCORM eller xAPI til jeres LMS, eller som et link. Fra 20.000 kr. ex moms.
+- **Kombineret**: En workshop sætter gang i det, og et online kursus holder fast i det bagefter.
+
+## Sådan bygges et kursus
+Afklaring, design, produktion, test og levering. Udgangspunktet er spørgsmålet: Hvad skal medarbejderne kunne mandag morgen?
+
+## Fagområder
+- [AI i arbejdet](https://ai-workshop.dk/): Workshops og kurser i ChatGPT, Claude og Copilot.
+- [Pharma og life science](https://pharmaconsulting.ai/): Generativ AI i regulerede miljøer, på engelsk.
+- [Video, podcast og streaming](https://berg-streaming.dk/): Kursusvideo, podcast og livestream.
+
+## Spørgsmål og svar
+- **Kan vi selv rette i kurset bagefter?** Ja. I kan få kildefilerne, så I selv kan rette tekster og billeder. Eller vi gør det for jer.
+- **Hvem ejer indholdet?** I ejer det færdige kursus. Vi skriver det præcist ind i tilbuddet.
+- **Kan kurset være på engelsk?** Ja. Vi laver kurser på dansk og engelsk, og et kursus kan godt findes i begge versioner.
+- **Hvor lang tid tager det?** Det afhænger af omfang. Vi lægger en tidsplan sammen med jer, når vi kender opgaven.
