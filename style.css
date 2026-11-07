@@ -50,7 +50,7 @@ p{margin:0}
 .top{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.96); backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--linje)}
 .top .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:72px; flex-wrap:wrap; padding-top:8px; padding-bottom:8px}
 .logo{display:flex; align-items:center; text-decoration:none; color:var(--navy)}
-.logo img{height:44px; width:auto}
+.logo img{height:48px; width:auto}
 .logo .ordmaerke{font-size:1.35rem; line-height:1; letter-spacing:.04em}
 .logo .ordmaerke b{font-weight:800}
 .logo .ordmaerke span{font-weight:400}
