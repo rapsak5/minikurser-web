@@ -67,13 +67,15 @@ section{padding:96px 0}
 
 /* Hero */
 .hero{padding:80px 0 96px}
-.hero .wrap{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:56px; align-items:center}
+.hero .wrap{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:56px; align-items:center}
 .hero-tekst{display:flex; flex-direction:column; gap:22px}
-.hero-billede{position:relative; border-radius:24px; overflow:hidden; aspect-ratio:4/5; background:var(--gul)}
-.hero-billede img{width:100%; height:100%; object-fit:cover}
+.hero-billede{position:relative; border-radius:24px; overflow:hidden; aspect-ratio:5/4; background:var(--navy-2)}
+.hero-billede img{width:100%; height:100%; object-fit:cover; object-position:38% 50%}
+.hero-billede .kredit{position:absolute; right:12px; bottom:10px; font-size:.68rem; color:rgba(255,255,255,.75); text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.hero-billede .kredit a{color:inherit}
 .hero-billede .pris-maerke{position:absolute; left:20px; bottom:20px; background:var(--hvid); color:var(--navy); border-radius:12px; padding:12px 16px; font-weight:700; font-size:.95rem; box-shadow:0 10px 30px rgba(20,18,40,.25)}
 .hero-billede .pris-maerke small{display:block; font-weight:600; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--tekst-2)}
-@media (max-width:860px){.hero .wrap{grid-template-columns:1fr} .hero-billede{max-width:440px; aspect-ratio:1/1}}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr} .hero-billede{max-width:560px; aspect-ratio:4/3}}
 
 /* Kort */
 .kort-raekke{display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px}
@@ -98,8 +100,13 @@ section{padding:96px 0}
 .trin p{font-size:.95rem; color:var(--tekst-2)}
 
 /* Fagområder */
-.fag{text-decoration:none; background:var(--navy-2); border-radius:var(--radius); padding:32px; display:flex; flex-direction:column; gap:12px; color:var(--hvid); transition:background .15s ease}
-.fag:hover{background:#45437a; color:var(--hvid)}
+.fag{text-decoration:none; background:var(--navy-2); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; color:var(--hvid); transition:background .15s ease, transform .15s ease}
+.fag:hover{background:#45437a; color:var(--hvid); transform:translateY(-2px)}
+.fag .plade{position:relative; height:132px; background:var(--hvid); display:flex; align-items:center; padding:0 28px; overflow:hidden}
+.fag .plade img{position:relative; z-index:1; max-height:58px; width:auto; max-width:72%}
+.fag .plade .maerke-tekst{position:relative; z-index:1; margin-left:14px; color:var(--navy); font-weight:800; font-size:1.25rem; letter-spacing:-.01em}
+.fag .plade svg{position:absolute; right:-6px; top:0; height:100%; width:auto}
+.fag .krop{padding:26px 28px 30px; display:flex; flex-direction:column; gap:12px; flex:1}
 .fag .domaene{color:var(--gul); font-size:.75rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase}
 .fag .titel{font-size:1.5rem; font-weight:800; line-height:1.2}
 .fag .tekst{color:var(--tekst-lys); font-size:.95rem}
