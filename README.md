@@ -13,10 +13,10 @@ Statisk hjemmeside for Minikurser. Hostes på GitHub Pages med domænet minikurs
 
 Siden virker uden dem, men skal have de rigtige filer:
 
-| Fil | Hvad | Kilde |
-|---|---|---|
-| `minikurser-logo.svg` | Primært logo, blå og gul | Rikkes mail "SVG filer" (juni 2025) |
-| `minikurser-symbol.svg` | Kun symbol, blå og gul (favicon) | Samme mail |
-| `minikurser-symbol-hvid.svg` | Kun symbol, hvid til mørk baggrund | Samme mail |
-| `hero.jpg` | Hero billede, ca. 800 x 1000 px | Canva designet "Minikuser" |
-| `kasper.jpg` | Portræt, ca. 800 x 1000 px | Kaspers eget foto |
+| Fil | Kilde |
+|---|---|
+| `minikurser-logo.png` | Canva varemærkesæt: Minikurser_LOGO - Blå + Gul (Primært).png |
+| `minikurser-symbol.png` | Canva varemærkesæt: Minikurser_SYMBOL - Blå + gul.png (favicon) |
+| `minikurser-symbol-hvid.png` | Canva varemærkesæt: Minikurser_SYMBOL - Hvid + gul.png |
+| `hero.jpg` | Canva designet "Minikuser", eksporteret som JPG |
+| `kasper.jpg` | Drive: KasperPortræt34.jpg (samme som på forlagetuldahl.dk) |
