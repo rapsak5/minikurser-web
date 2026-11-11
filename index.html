@@ -17,6 +17,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap">
 <link rel="stylesheet" href="style.css">
+<script>if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('anim')</script>
+<script src="anim.js" defer></script>
 <meta name="msvalidate.01" content="6FF3944E70AC36E640FBBDFD5BC174A5">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://minikurser.dk/#website","url":"https://minikurser.dk/","name":"Minikurser","inLanguage":"da-DK","publisher":{"@id":"https://minikurser.dk/#organization"}},{"@type":"WebPage","@id":"https://minikurser.dk/#side","url":"https://minikurser.dk/","name":"Minikurser · Kursusforløb og e-læring til virksomheder","isPartOf":{"@id":"https://minikurser.dk/#website"},"inLanguage":"da-DK","dateModified":"2026-11-07"},{"@type":"Organization","@id":"https://minikurser.dk/#organization","name":"Minikurser","url":"https://minikurser.dk/","logo":"https://minikurser.dk/img/minikurser-logo.png","email":"kontakt@minikurser.dk","telephone":"+45 24 42 54 25","address":{"@type":"PostalAddress","streetAddress":"Ove Billes Vej 7, 1.","postalCode":"2300","addressLocality":"København S","addressCountry":"DK"},"areaServed":"DK","parentOrganization":{"@id":"https://berg-streaming.dk/#organization"},"founder":{"@id":"https://ai-workshop.dk/#kasper"},"description":"Designer og udvikler kursusforløb og e-læring til virksomheder. Fysiske forløb i virksomhedens egne lokaler eller online kurser."},{"@type":"Organization","@id":"https://berg-streaming.dk/#organization","name":"Berg-Streaming","url":"https://berg-streaming.dk/","vatID":"DK40989102","address":{"@type":"PostalAddress","streetAddress":"Ove Billes Vej 7, 1.","postalCode":"2300","addressLocality":"København S","addressCountry":"DK"},"founder":{"@id":"https://ai-workshop.dk/#kasper"}},{"@type":"Person","@id":"https://ai-workshop.dk/#kasper","name":"Kasper Bergstrøm","url":"https://ai-workshop.dk/","jobTitle":"Læringsspecialist og e-læringskonsulent","sameAs":["https://www.linkedin.com/in/kasper-bergstrom"],"knowsAbout":["E-læring","Kursusdesign","Articulate Rise 360","Generativ AI","Organisatorisk læring"]},{"@type":"Service","@id":"https://minikurser.dk/#fysiske-forloeb","name":"Fysiske kursusforløb","description":"Workshops og kursusdage i virksomhedens egne lokaler. Kort oplæg, demonstration og øvelser på medarbejdernes rigtige opgaver.","provider":{"@id":"https://minikurser.dk/#organization"},"areaServed":"DK","url":"https://minikurser.dk/#forloeb","offers":{"@type":"Offer","priceSpecification":{"@type":"PriceSpecification","minPrice":20000,"priceCurrency":"DKK","valueAddedTaxIncluded":false}}},{"@type":"Service","@id":"https://minikurser.dk/#e-laering","name":"E-læring","description":"Online kurser bygget fra bunden til målgruppen. Korte moduler med video, quiz og kursusbevis, klar til LMS som SCORM eller xAPI.","provider":{"@id":"https://minikurser.dk/#organization"},"areaServed":"DK","url":"https://minikurser.dk/e-laering.html","offers":{"@type":"Offer","priceSpecification":{"@type":"PriceSpecification","minPrice":20000,"priceCurrency":"DKK","valueAddedTaxIncluded":false}}}]}</script>
 </head>
@@ -126,7 +128,7 @@
           <span class="domaene">ai-workshop.dk</span>
           <span class="titel">AI i arbejdet</span>
           <span class="tekst">Workshops og kurser i ChatGPT, Claude og Copilot. Med fokus på medarbejdernes egne opgaver.</span>
-          <span class="videre">Gå til ai-workshop.dk →</span>
+          <span class="videre">Gå til ai-workshop.dk <span class="pil" aria-hidden="true">→</span></span>
           </span>
         </a>
         <a class="fag" href="https://pharmaconsulting.ai">
@@ -135,7 +137,7 @@
           <span class="domaene">pharmaconsulting.ai</span>
           <span class="titel">Pharma og life science</span>
           <span class="tekst">Generativ AI i regulerede miljøer. Træning, rådgivning og forløb på engelsk.</span>
-          <span class="videre">Gå til pharmaconsulting.ai →</span>
+          <span class="videre">Gå til pharmaconsulting.ai <span class="pil" aria-hidden="true">→</span></span>
           </span>
         </a>
         <a class="fag" href="https://berg-streaming.dk">
@@ -144,7 +146,7 @@
           <span class="domaene">berg-streaming.dk</span>
           <span class="titel">Video, podcast og streaming</span>
           <span class="tekst">Kursusvideo, podcast og livestream. Og kurser i at lave det selv.</span>
-          <span class="videre">Gå til berg-streaming.dk →</span>
+          <span class="videre">Gå til berg-streaming.dk <span class="pil" aria-hidden="true">→</span></span>
           </span>
         </a>
       </div>

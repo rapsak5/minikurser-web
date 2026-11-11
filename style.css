@@ -154,3 +154,61 @@ footer nav{display:flex; flex-wrap:wrap; gap:20px}
   .menu{gap:0 16px}
   .menu .ud-mobil{display:none}
 }
+
+/* Animationer. Scroll-effekterne kræver anim.js (klassen .anim på html).
+   Ved "reducer bevægelse" er der ingen animationer. */
+.top{transition:box-shadow .25s ease}
+.top.rullet{box-shadow:0 6px 24px rgba(42,40,71,.08)}
+.pil{display:inline-block}
+
+@media (prefers-reduced-motion: no-preference){
+  /* Hero: tekst og billede kommer ind, når siden åbner */
+  .hero-tekst > *{animation:op .8s cubic-bezier(.2,.7,.2,1) both}
+  .hero-tekst > :nth-child(2){animation-delay:.08s}
+  .hero-tekst > :nth-child(3){animation-delay:.16s}
+  .hero-tekst > :nth-child(4){animation-delay:.24s}
+  .hero-billede{animation:afdaek 1s .15s cubic-bezier(.65,0,.25,1) both}
+  .hero-billede img{animation:zoomud 1.8s .15s cubic-bezier(.2,.7,.2,1) both}
+  .hero-billede .pris-maerke{animation:pop .55s 1s cubic-bezier(.3,1.4,.5,1) both}
+
+  /* Scroll: elementer glider ind et ad gangen */
+  .anim .vis{opacity:0; translate:0 26px; transition:opacity .7s ease var(--d,0s), translate .8s cubic-bezier(.2,.7,.2,1) var(--d,0s), transform .15s ease, background .15s ease}
+  .anim .vis.synlig{opacity:1; translate:none}
+
+  /* Proces: tallene popper, når trinnet kommer frem */
+  .anim .trin li.vis::before{scale:.3; transition:scale .5s cubic-bezier(.3,1.6,.5,1) calc(var(--d,0s) + .25s)}
+  .anim .trin li.synlig::before{scale:1}
+
+  /* Kontakt: raketten letter og svæver */
+  .anim .kontakt .symbol.vis{translate:0 48px}
+  .anim .kontakt .symbol.synlig{translate:none; animation:svaev 3.4s ease-in-out 1.2s infinite}
+
+  /* Fagområder: lidt liv i illustrationerne ved hover */
+  .fag .pil{transition:transform .2s ease}
+  .fag:hover .pil, .fag:focus-visible .pil{transform:translateX(5px)}
+  .fag .plade svg *{transform-box:fill-box; transform-origin:center}
+  .fag[href*="ai-workshop"]:hover .plade svg > circle,
+  .fag[href*="ai-workshop"]:focus-visible .plade svg > circle{animation:skriv 1.1s ease-in-out infinite}
+  .fag[href*="ai-workshop"] .plade svg > circle:nth-of-type(2){animation-delay:.15s}
+  .fag[href*="ai-workshop"] .plade svg > circle:nth-of-type(3){animation-delay:.3s}
+  .fag[href*="pharma"]:hover .plade svg g:nth-of-type(2) circle,
+  .fag[href*="pharma"]:focus-visible .plade svg g:nth-of-type(2) circle{animation:puls 1.4s ease-in-out infinite}
+  .fag[href*="pharma"] .plade svg g:nth-of-type(2) circle:nth-child(2){animation-delay:.25s}
+  .fag[href*="pharma"] .plade svg g:nth-of-type(2) circle:nth-child(3){animation-delay:.5s}
+  .fag[href*="berg-streaming"]:hover .plade svg rect,
+  .fag[href*="berg-streaming"]:focus-visible .plade svg rect{animation:lyd .5s ease-in-out infinite alternate}
+  .fag[href*="berg-streaming"] .plade svg rect:nth-child(2n){animation-duration:.42s; animation-delay:-.2s}
+  .fag[href*="berg-streaming"] .plade svg rect:nth-child(3n){animation-duration:.6s; animation-delay:-.35s}
+
+  /* FAQ: svaret toner frem */
+  .faq details[open] p{animation:op .35s ease both}
+}
+
+@keyframes op{from{opacity:0; translate:0 18px}to{opacity:1; translate:none}}
+@keyframes afdaek{from{clip-path:inset(100% 0 0 0 round 24px)}to{clip-path:inset(0 0 0 0 round 24px)}}
+@keyframes zoomud{from{transform:scale(1.12)}to{transform:none}}
+@keyframes pop{from{opacity:0; transform:scale(.6) translateY(12px)}to{opacity:1; transform:none}}
+@keyframes svaev{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes skriv{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+@keyframes puls{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
+@keyframes lyd{to{transform:scaleY(.4)}}

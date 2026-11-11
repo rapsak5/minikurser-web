@@ -7,6 +7,7 @@ Statisk hjemmeside for Minikurser. Hostes på GitHub Pages med domænet minikurs
 - `index.html` forside
 - `e-laering.html` underside om e-læring
 - `style.css` fælles stil efter designguiden fra Colored Sheep (Montserrat, #2a2847, #ffcf3b, #f2f2f2)
+- `anim.js` animationer ved scroll (siden virker uden)
 - `CNAME` domænet til GitHub Pages
 
 ## Billeder i `img/`
