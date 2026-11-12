@@ -216,6 +216,22 @@
       <img class="symbol" src="img/minikurser-symbol-hvid.png" alt="" width="40" height="64" onerror="this.hidden=true">
       <h2>Hvad skal jeres medarbejdere kunne om tre måneder?</h2>
       <p class="lead">Fortæl os om opgaven. Så vender vi tilbage med et forslag til forløb og pris.</p>
+      <form class="kf" id="kontaktformular" action="https://formsubmit.co/kasper@ai-workshop.dk" method="POST">
+        <input type="hidden" name="_subject" value="Ny besked fra minikurser.dk">
+        <input type="hidden" name="_next" value="https://minikurser.dk/?tak=1#kontaktformular">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" class="kf-honning" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <h3>Fortæl os om opgaven</h3>
+        <div class="kf-to">
+          <label for="kf-navn">Navn<input id="kf-navn" name="navn" required autocomplete="name"></label>
+          <label for="kf-mail">E-mail<input id="kf-mail" name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <label for="kf-org">Virksomhed (valgfrit)<input id="kf-org" name="organisation" autocomplete="organization"></label>
+        <label for="kf-besked">Besked<textarea id="kf-besked" name="besked" rows="5" required></textarea></label>
+        <div class="kf-raekke"><button class="knap knap-gul" type="submit">Send besked</button><p class="kf-note">Beskeden går til Kasper gennem tjenesten FormSubmit og bruges kun til at svare dig.</p></div>
+        <p class="kf-tak" id="kf-tak" role="status" hidden>Tak for din besked. Kasper vender tilbage hurtigst muligt.</p>
+      </form>
+      <p class="lead" style="margin-top:28px">Eller skriv og ring direkte:</p>
       <div class="knapper" style="justify-content:center">
         <a class="knap knap-gul" href="mailto:kontakt@minikurser.dk">kontakt@minikurser.dk</a>
         <a class="knap knap-ramme" href="tel:+4524425425">+45 24 42 54 25</a>
@@ -236,5 +252,8 @@
   </div>
 </footer>
 
+<script>
+if (/[?&]tak=1/.test(location.search)) { var t = document.getElementById('kf-tak'); if (t) t.hidden = false; }
+</script>
 </body>
 </html>

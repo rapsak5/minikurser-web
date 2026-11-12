@@ -212,3 +212,22 @@ footer nav{display:flex; flex-wrap:wrap; gap:20px}
 @keyframes skriv{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
 @keyframes puls{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
 @keyframes lyd{to{transform:scaleY(.4)}}
+
+/* Kontaktformular (FormSubmit til kasper@ai-workshop.dk) */
+.kf{position:relative;display:grid;gap:14px;margin-top:32px;padding:24px;border-radius:var(--kf-radius);background:var(--kf-bg);border:1px solid var(--kf-line);color:var(--kf-ink);text-align:left;box-sizing:border-box}
+.kf *{box-sizing:border-box}
+.kf h3{margin:0;font-size:1.2rem;line-height:1.25;color:var(--kf-ink)}
+.kf .kf-to{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:560px){.kf .kf-to{grid-template-columns:1fr}}
+.kf label{display:flex;flex-direction:column;gap:6px;font-size:.88rem;font-weight:600;color:var(--kf-label);min-width:0}
+.kf input,.kf textarea{font:inherit;font-size:16px;font-weight:400;color:var(--kf-field-ink);background:var(--kf-field-bg);border:1px solid var(--kf-line);border-radius:10px;padding:11px 13px;width:100%;margin:0}
+.kf textarea{min-height:130px;resize:vertical}
+.kf input:focus-visible,.kf textarea:focus-visible{outline:2px solid var(--kf-accent);outline-offset:1px}
+.kf .kf-raekke{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.kf .kf-raekke button{font-family:inherit;cursor:pointer;border:0;margin:0}
+.kf .kf-note{flex:1;min-width:200px;margin:0;font-size:.82rem;color:var(--kf-label);opacity:.85}
+.kf .kf-note a{color:inherit}
+.kf .kf-honning{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.kf .kf-tak{margin:0;padding:12px 14px;border-radius:10px;background:var(--kf-tak-bg);color:var(--kf-tak-ink);font-weight:600}
+.kf{--kf-radius:var(--radius);--kf-bg:rgba(255,255,255,.06);--kf-line:#6f6d94;--kf-ink:#fff;--kf-label:var(--tekst-lys);--kf-field-bg:var(--navy-deep);--kf-field-ink:#fff;--kf-accent:var(--gul);--kf-tak-bg:var(--gul);--kf-tak-ink:var(--navy)}
+.kontakt .kf{max-width:680px;margin:32px auto 0}
