@@ -120,7 +120,7 @@ function ic(n,x,y,sc=2,c,ol){const s=icon(n,c,ol);b.drawImage(s,Math.round(x),Ma
 /* knap med ikon og/eller tekst */
 function btn(x,y,w,h,o){const on=o.on!==false,isc=o.isc||2,sc=o.sc||2;
  rr(b,x,y+3,w,h,9,'#070a1e');frame(x,y,w,h,on?'#8a6a10':'#2c3352',on?YEL:'#3e4770',9);if(on)R(b,x+9,y+3,w-18,2,'#ffe58a');
- const col=on?DARK:'#dfe5fa';const icv=o.icon?icon(o.icon,col):null;const iw=icv?icv.width*isc:0;const lw=o.label?measure(o.label,sc):0;const gap=icv&&o.label?8:0;let cx=x+(w-iw-gap-lw)/2;
+ const col=on?DARK:'#dfe5fa';const icv=o.spr||(o.icon?icon(o.icon,col):null);const iw=icv?icv.width*isc:0;const lw=o.label?measure(o.label,sc):0;const gap=icv&&o.label?8:0;let cx=x+(w-iw-gap-lw)/2;
  if(icv){b.drawImage(icv,Math.round(cx),Math.round(y+(h-icv.height*isc)/2),iw,icv.height*isc);cx+=iw+gap}
  if(o.label)T(o.label,cx,y+Math.round((h-7*sc)/2),{s:sc,c:col});
  if(o.fn)Z(x-5,y-5,w+10,h+12,o.fn)}
@@ -175,6 +175,25 @@ SPR.wOcean=draw(17,11,x=>{
  R(x,14,3,2,2,'#1e1418');R(x,14,3,1,1,'#ffffff');R(x,9,0,3,1,'#ff8a1e');
 },DARK);
 const WICON=[SPR.wNord,SPR.wTrop,SPR.wOcean];
+
+/* pynt til odderen. Skaller kan kun bruges her, og hver ting har en fakta om havet */
+SPR.aCrown=draw(12,8,x=>{R(x,1,6,10,2,'#2f8a48');R(x,1,6,10,1,'#4fb860');for(const[fx,h]of[[1,3],[4,5],[7,4],[10,3]]){for(let j=0;j<h;j++)R(x,fx+(j%2),5-j,1,1,'#6ad87a');R(x,fx+(h%2),5-h,1,1,'#e0b840')}},INK);
+SPR.aStar=draw(9,9,x=>{for(let k=0;k<5;k++){const an=-Math.PI/2+k*2*Math.PI/5;line(x,4,4,Math.round(4+Math.cos(an)*4),Math.round(4+Math.sin(an)*4),'#ff7a4a')}ell(x,4,4.4,2.2,2.2,'#ff7a4a');R(x,4,4,1,1,'#ffc08a');R(x,3,3,1,1,'#ffc08a')},INK);
+SPR.aGoggles=draw(9,5,x=>{R(x,0,1,4,2,'#2a2a3a');rr(x,3,0,6,5,2,'#ffcf3b');R(x,4,1,4,3,'#8fe0ff');R(x,4,1,2,1,'#ffffff')},INK);
+SPR.aHat=draw(14,10,x=>{ell(x,7,8,6.6,5.8,'#2f6fe0');x.clearRect(0,9,14,1);R(x,0,6,14,3,'#1f4fb0');for(let i=0;i<14;i+=2)R(x,i,6,1,3,'#3a86f0');R(x,4,3,3,1,'#6aa8ff');ell(x,7,1.6,2.2,1.7,'#ffffff')},INK);
+const ITEMS=[
+ {id:'crown',slot:'head',s:SPR.aCrown,ax:7,ay:8,dx:0,dy:2,price:5,name:'TANGKRONE',sayName:'en tangkrone',
+  fact:'TANGSKOVE GIVER LY OG MAD TIL MANGE DYR. DE OPTAGER OGSÅ CO2 FRA LUFTEN.',say:'Tangkrone. Tangskove giver ly og mad til mange dyr. De optager også CO2 fra luften.'},
+ {id:'star',slot:'head',s:SPR.aStar,ax:5,ay:5,dx:-3,dy:0,price:10,name:'SØSTJERNE',sayName:'en søstjerne',
+  fact:'EN SØSTJERNE KAN FÅ EN NY ARM, HVIS DEN MISTER EN.',say:'Søstjerne. En søstjerne kan få en ny arm, hvis den mister en.'},
+ {id:'goggles',slot:'face',s:SPR.aGoggles,ax:7,ay:3,dx:1,dy:1,price:15,name:'DYKKERBRILLER',sayName:'dykkerbriller',
+  fact:'HAVODDEREN KAN LUKKE ØRER OG NÆSE, NÅR DEN DYKKER.',say:'Dykkerbriller. Havodderen kan lukke ører og næse, når den dykker.'},
+ {id:'hat',slot:'head',s:SPR.aHat,ax:8,ay:9,dx:-1,dy:4,price:20,name:'HUE',sayName:'en hue',
+  fact:'HAVODDEREN HAR DEN TÆTTESTE PELS AF ALLE DYR. DEN HOLDER DEN VARM I DET KOLDE VAND.',say:'Hue. Havodderen har den tætteste pels af alle dyr. Den holder den varm i det kolde vand.'}];
+const ITEM=Object.fromEntries(ITEMS.map(i=>[i.id,i]));
+function drawAcc(ctx,pose,x,y,sc=1,wear){wear=wear||st.wear;const A=pose==='swim'?{h:[45,6],e:[51,10]}:{h:[41,6],e:[47,6]};
+ for(const slot of['face','head']){const id=wear[slot];if(!id||!ITEM[id])continue;const it=ITEM[id],base=it.slot==='face'?A.e:A.h;
+  ctx.drawImage(it.s,Math.round(x+(base[0]+it.dx-it.ax)*sc),Math.round(y+(base[1]+it.dy-it.ay)*sc),it.s.width*sc,it.s.height*sc)}}
 
 /* ---------- oddere ---------- */
 const OV=[
@@ -299,9 +318,9 @@ const GLOBE=draw(AW,AH,x=>{
 });
 
 /* ---------- tilstand ---------- */
-const st={name:'',otter:0,prog:{},plast:0,sel:0,mute:false,kb:false};
-try{const s=JSON.parse(localStorage.getItem('odderspil_v1')||'null');if(s){st.name=String(s.name||'').slice(0,10);st.otter=[0,1,2].includes(s.otter)?s.otter:0;st.prog=s.prog||{};st.plast=s.plast|0;st.mute=!!s.mute}}catch(e){}
-const save=()=>{try{localStorage.setItem('odderspil_v1',JSON.stringify({name:st.name,otter:st.otter,prog:st.prog,plast:st.plast,mute:st.mute}))}catch(e){}};
+const st={name:'',otter:0,prog:{},plast:0,sel:0,mute:false,kb:false,shells:0,owned:[],wear:{head:null,face:null}};
+try{const s=JSON.parse(localStorage.getItem('odderspil_v1')||'null');if(s){st.name=String(s.name||'').slice(0,10);st.otter=[0,1,2].includes(s.otter)?s.otter:0;st.prog=s.prog||{};st.plast=s.plast|0;st.mute=!!s.mute;st.shells=Math.max(0,s.shells|0);st.owned=Array.isArray(s.owned)?s.owned.filter(id=>ITEM[id]):[];if(s.wear)for(const sl of['head','face']){const id=s.wear[sl];st.wear[sl]=id&&ITEM[id]&&st.owned.includes(id)?id:null}}}catch(e){}
+const save=()=>{try{localStorage.setItem('odderspil_v1',JSON.stringify({name:st.name,otter:st.otter,prog:st.prog,plast:st.plast,mute:st.mute,shells:st.shells,owned:st.owned,wear:st.wear}))}catch(e){}};
 const isTouch=(()=>{try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}})();
 let scr='title',fade=0,fadeDir=0,nextScr=null,time=0,g=null,zones=[];
 const Z=(x,y,w,h,fn)=>zones.push({x,y,w,h,fn});
@@ -339,6 +358,7 @@ addEventListener('keydown',e=>{audioInit();const k=e.key;if(fadeDir)return;
  if(scr==='title'){if(k==='Enter'||k===' ')go('select');return}
  if(scr==='select'){if(k==='Backspace'){st.name=st.name.slice(0,-1);e.preventDefault()}else if(k==='Enter'){if(st.kb)st.kb=false;else startMap()}else if(k==='Escape')st.kb=false;else if(k==='ArrowLeft'&&!st.kb)pickOtter((st.otter+2)%3);else if(k==='ArrowRight'&&!st.kb)pickOtter((st.otter+1)%3);else if(k.length===1)typeKey(k.toUpperCase());return}
  if(scr==='map'){if(k==='Enter'||k===' ')startLevel(st.sel);return}
+ if(scr==='shop'){if(k==='Escape'||k==='Backspace')go('map');return}
  if(scr==='play'&&g){
   if(e.repeat)return;
   if(g.quiz){if(g.quiz.done){if(k==='Enter'||k===' ')closeQuiz()}else if('123'.includes(k))answer(+k-1);return}
@@ -353,13 +373,13 @@ const KEYS='ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ0123456789 ';
 function typeKey(ch){if(ch==='SLET'){st.name=st.name.slice(0,-1);sfx.move();return}if(ch==='OK'){st.kb=false;sfx.ui();return}if(!KEYS.includes(ch))return;if(ch===' '&&(!st.name||st.name.endsWith(' ')))return;if(st.name.length<10){st.name+=ch;sfx.move()}}
 function pickOtter(i){if(st.otter!==i){st.otter=i;sfx.ui();save();say(['Havodder','Kæmpeodder','Dværgodder'][i])}}
 function startMap(){st.name=nm();save();st.kb=false;go('map')}
-function onEnter(s){if(s==='select')say('Vælg din odder. Tryk på den, du bedst kan lide.');else if(s==='map')say(st.prog[0]>0?'Flot klaret! Flere baner kommer snart.':'Tryk på bane et. Så starter vi.')}
+function onEnter(s){if(s==='shop'){shop.sel=null;say('Butikken! Her kan du bruge dine skaller på pynt til odderen. Tryk på en ting for at prøve den.')}else if(s==='select')say('Vælg din odder. Tryk på den, du bedst kan lide.');else if(s==='map')say(st.prog[0]>0?'Flot klaret! Flere baner kommer snart.':'Tryk på bane et. Så starter vi.')}
 
 /* ---------- fælles tegning ---------- */
 function blit(ox=0,oy=0){b.drawImage(art,ox*2,oy*2,W,H)}
 function soundBtn(x,y){rr(b,x,y+3,44,34,11,'#070a1e');frame(x,y,44,34,'#2c3352','#1c2654',11);ic(st.mute?'mute':'sound',x+8,y+5,2,st.mute?'#8a94b8':'#fff');Z(x-6,y-6,56,48,toggleMute)}
 function hand(x,y,sc=2){b.drawImage(SPR.hand,Math.round(x),Math.round(y),12*sc,13*sc)}
-function footer(){P(6,336,206,20,'rgba(10,14,36,.8)',6);T('BYGGET AF MINIKURSER.DK',16,342,{c:YEL});T('V0.3 PROTOTYPE',W-12,345,{a:'r',c:'#dfe6ff',o:DARK})}
+function footer(){P(6,336,206,20,'rgba(10,14,36,.8)',6);T('BYGGET AF MINIKURSER.DK',16,342,{c:YEL});T('V0.4 PROTOTYPE',W-12,345,{a:'r',c:'#dfe6ff',o:DARK})}
 function tagLine(y){const w1=measure('DEN BLÅ PLANET'),w2=measure('PRÆSENTERER'),tw=w1+10+w2;P((W-tw)/2-12,y-7,tw+24,21,'rgba(18,24,58,.86)');T('DEN BLÅ PLANET',(W-tw)/2,y,{c:YEL});T('PRÆSENTERER',(W-tw)/2+w1+10,y,{c:'#fff'})}
 const TITLE_W={c:'#ffffff',o:'#151a3c',ow:3,sh:3,b:2},TITLE_Y={c:GOLD,o:'#2a2408',ow:3,sh:3,b:2};
 
@@ -369,7 +389,7 @@ function drawTitle(t){
  a.drawImage(BG.title,0,0);
  const gx=mod(t*13,400)-40;a.drawImage((t*5|0)%2?SPR.gullA:SPR.gullB,Math.round(gx),Math.round(86+Math.sin(t*1.3)*3));
  TRASH.forEach((o,i)=>a.drawImage(o.s,o.x,o.y+Math.round(Math.sin(t*1.5+i*1.7))));
- const oy=146+Math.round(Math.sin(t*1.6));a.drawImage(otterBack(st.otter,(t*2|0)%2),12,oy);
+ const oy=146+Math.round(Math.sin(t*1.6));a.drawImage(otterBack(st.otter,(t*2|0)%2),12,oy);drawAcc(a,'back',12,oy);
  R(a,8,oy+18,62,1,'#9cc4f4');R(a,18,oy+20,40,1,'#5a86d8');
  blit();
  tagLine(20);
@@ -394,12 +414,12 @@ function drawSelect(t){
  a.drawImage(BG.select,0,0);
  STRASH.forEach((o,i)=>a.drawImage(o.s,o.x,o.y+Math.round(Math.sin(t*1.4+i*2))));
  const sw=otterSwim(st.otter,(t*7|0)%4);
- a.save();a.translate(128,88+Math.round(Math.sin(t*1.8)*2));a.rotate(.5);a.drawImage(sw,-27,-12);a.restore();
+ a.save();a.translate(128,88+Math.round(Math.sin(t*1.8)*2));a.rotate(.5);a.drawImage(sw,-27,-12);drawAcc(a,'swim',-27,-12);a.restore();
  const r=rng(9);for(let i=0;i<16;i++){const bx=96+r()*60,by=64+r()*46,ph=r()*6;if(Math.sin(t*3+ph)>.2){R(a,bx,by,1,3,'#e8faff');R(a,bx-1,by+1,3,1,'#e8faff')}}
  for(let i=0;i<3;i++){const wx=9+i*108,wy=116,sel=i===st.otter;
   if(sel)rr(a,wx-2,wy-2,92,64,9,YEL);
   a.drawImage(WIN[i],wx,wy);
-  a.drawImage(otterSwim(i,sel?(t*7|0)%4:0),wx+17,wy+8+Math.round(Math.sin(t*2+i*2)*(sel?2:1)));
+  {const oy2=wy+8+Math.round(Math.sin(t*2+i*2)*(sel?2:1));a.drawImage(otterSwim(i,sel?(t*7|0)%4:0),wx+17,oy2);drawAcc(a,'swim',wx+17,oy2)}
   if(sel){const ay=wy-9+Math.round(Math.abs(Math.sin(t*4))*-3);R(a,wx+40,ay,8,2,YEL);R(a,wx+41,ay+2,6,1,YEL);R(a,wx+42,ay+3,4,1,YEL);R(a,wx+43,ay+4,2,1,YEL)}}
  blit();
  T('VÆLG DIN',54,26,{s:4,c:'#fff',o:'#151a3c',ow:2,sh:2,b:2});T('ODDER',54,62,{s:4,c:GOLD,o:'#2a2408',ow:2,sh:2,b:2});
@@ -431,7 +451,7 @@ function drawMap(t){
  a.drawImage(BG.map,0,0);
  const r=rng(33);for(let i=0;i<10;i++){const x=r()*AW|0,y=r()*AH|0,ph=r()*6;if(Math.sin(t*2.5+ph)>.6){R(a,x-1,y,3,1,'#fff');R(a,x,y-1,1,3,'#fff')}}
  a.drawImage(GLOBE,0,0);
- a.drawImage(otterBack(st.otter,(t*2|0)%2),GC.x-27,GC.y-GC.r-17+Math.round(Math.sin(t*1.4)));
+ {const my=GC.y-GC.r-17+Math.round(Math.sin(t*1.4));a.drawImage(otterBack(st.otter,(t*2|0)%2),GC.x-27,my);drawAcc(a,'back',GC.x-27,my)}
  blit();
  if(nm()){P(30,12,measure('HEJ '+nm())+22,22,'rgba(18,24,58,.86)',8);T('HEJ',41,20,{c:YEL});T(nm(),41+measure('HEJ '),20)}
  T('VÆLG',32,50,Object.assign({s:5},TITLE_W));T('EN BANE',32,94,Object.assign({s:5},TITLE_Y));
@@ -452,6 +472,7 @@ function drawMap(t){
  const first=LV.findIndex((l,i)=>unlocked(i)&&!(st.prog[i]>0));
  if(first>=0){const l=LV[first];T('START HER',l.x*2-24,l.y*2-3,{a:'r',c:YEL,o:DARK});hand(l.x*2-6,l.y*2+12+Math.abs(Math.sin(t*4))*-6)}
  btn(30,330,150,24,{icon:'back',label:'SKIFT ODDER',on:false,sc:1,fn:()=>go('select')});
+ btn(192,326,138,28,{spr:SPR.shell,label:'BUTIK',sc:2,fn:()=>go('shop')});{const n=String(st.shells),bw=measure(n)+12;rr(b,330-bw+6,317,bw,17,8,DARK);rr(b,331-bw+6,318,bw-2,15,7,'#2c3a6c');T(n,330-bw/2+6,322,{a:'c'})}
  soundBtn(W-56,10);
 }
 
@@ -497,7 +518,7 @@ function doWhirl(){if(!playing()||!g.ready||g.whirl>0)return;g.whirl=.0001;g.rea
 function openQuiz(){g.quiz={pick:-1,done:false,t:0};sfx.ui();say(QUIZ.say)}
 function answer(i){const q=g.quiz;if(!q||q.done)return;q.pick=i;q.done=true;q.right=i===QUIZ.ok;if(q.right){g.hearts=Math.min(5,g.hearts+1);g.score+=100;sfx.ok();say(QUIZ.sayOk)}else{sfx.bad();say(QUIZ.sayNo+(i===0?' Plastik er ikke mad.':''))}}
 function closeQuiz(){g.quiz=null;setStep(8)}
-function finish(){const stars=g.lost===0?3:g.lost===1?2:1;g.result={stars,t:0};st.prog[0]=Math.max(st.prog[0]|0,stars);st.plast+=g.plast;save();say('Bane klaret! Du fik '+(stars===1?'én stjerne.':stars+' stjerner.'))}
+function finish(){const stars=g.lost===0?3:g.lost===1?2:1;g.result={stars,t:0};st.prog[0]=Math.max(st.prog[0]|0,stars);st.plast+=g.plast;st.shells+=g.shells;save();say('Bane klaret! Du fik '+(stars===1?'én stjerne.':stars+' stjerner.'))}
 function backToMap(){st.sel=0;go('map')}
 
 function updPlay(dt){
@@ -585,9 +606,9 @@ function drawPlay(t){
   else if(o.k==='quiz'){a.drawImage(SPR.quiz,x,Math.round(o.y-8+Math.sin(g.t*3)*2))}
   else a.drawImage(o.s,x,Math.round(o.y-o.h/2+(o.k==='haz'?0:Math.sin(g.t*2.2+o.ph)*1.5)))}
  const ox=OX-30+g.exitX,oy=g.y-12;
- if(g.whirl>0){a.save();a.translate(OX-2,g.y);a.rotate(g.whirl*14);a.drawImage(otterSwim(st.otter,0),-27,-12);a.restore();
+ if(g.whirl>0){a.save();a.translate(OX-2,g.y);a.rotate(g.whirl*14);a.drawImage(otterSwim(st.otter,0),-27,-12);drawAcc(a,'swim',-27,-12);a.restore();
   for(let k=0;k<2;k++){const rad=(g.whirl-k*.16)*230;if(rad>4)for(let an=0;an<6.283;an+=Math.max(.02,2.4/rad)){const px=OX+Math.cos(an)*rad,py=g.y+Math.sin(an)*rad*.8;if(py>40&&py<176&&((an*20|0)%3))R(a,px,py,2,1,k?'#bfeaff':'#ffffff')}}}
- else if(!(g.blink>0&&(g.t*12|0)%2)){const tilt=Math.max(-3,Math.min(3,(LY[g.lane]-g.y)*.25));a.drawImage(otterSwim(st.otter,(g.t*8|0)%4),Math.round(ox),Math.round(oy+tilt))}
+ else if(!(g.blink>0&&(g.t*12|0)%2)){const tilt=Math.max(-3,Math.min(3,(LY[g.lane]-g.y)*.25));a.drawImage(otterSwim(st.otter,(g.t*8|0)%4),Math.round(ox),Math.round(oy+tilt));drawAcc(a,'swim',Math.round(ox),Math.round(oy+tilt))}
  for(const p of g.parts){if(p.bub){R(a,p.x,p.y,2,2,'rgba(220,246,255,.8)');R(a,p.x,p.y,1,1,'#fff')}else R(a,p.x,p.y,1+(p.life>.3?1:0),1,p.c)}
  blit(shx,0);
  /* svømmebaner */
@@ -639,14 +660,49 @@ function drawResult(){const r=g.result;Z(0,0,W,H,()=>{});R(b,0,0,W,H,'rgba(6,10,
  const rows=[[SPR.bottle,'PLASTIK',g.plast],[SPR.shell,'SKALLER',g.shells],[SPR.crab,'DYR BEFRIET',g.freed],[null,'POINT',g.score]];
  rows.forEach(([s,l,v],i)=>{const y=152+i*24;if(s)b.drawImage(s,160,y-2+Math.round((14-s.height*1.5)/2),Math.round(s.width*1.5),Math.round(s.height*1.5));T(l,186,y,{s:2,c:'#c8d2f0'});T(v,480,y,{s:2,a:'r',c:i===3?YEL:'#fff'})});
  T('GODT SVØMMET'+(nm()?', '+nm():'')+'! FLERE BANER ER PÅ VEJ.',W/2,254,{a:'c',c:'#c8d2f0'});
- btn(150,278,166,36,{icon:'globe',label:'KORTET',fn:backToMap});btn(326,278,164,36,{icon:'replay',label:'IGEN',on:false,fn:()=>go('play',newGame)});}
+ btn(148,278,116,36,{icon:'globe',label:'KORTET',fn:backToMap});btn(270,278,100,36,{icon:'replay',label:'IGEN',on:false,fn:()=>go('play',newGame)});btn(376,278,116,36,{spr:SPR.shell,label:'BUTIK',on:false,fn:()=>go('shop')});}
+
+/* ============ BUTIK ============ */
+const shop={sel:null};
+function prevWear(){const w={head:st.wear.head,face:st.wear.face};if(shop.sel!=null){const it=ITEMS[shop.sel];w[it.slot]=it.id}return w}
+function shopPick(i){shop.sel=i;sfx.ui();say(ITEMS[i].say)}
+function buy(i){const it=ITEMS[i];if(st.owned.includes(it.id))return;if(st.shells<it.price){sfx.bad();say('Du mangler '+(it.price-st.shells)+' skaller. Spil en bane mere, så finder du flere.');return}
+ st.shells-=it.price;st.owned.push(it.id);st.wear[it.slot]=it.id;save();sfx.win();say('Flot! Nu har odderen '+it.sayName+' på.')}
+function wearToggle(i){const it=ITEMS[i];st.wear[it.slot]=st.wear[it.slot]===it.id?null:it.id;save();sfx.ui()}
+function drawShop(t){
+ a.drawImage(BG.select,0,0);
+ const r=rng(12);for(let i=0;i<14;i++){const bx=r()*AW,ph=r()*6,by=180-mod(t*12+r()*120,110);if(Math.sin(t*2+ph)>-.3)R(a,bx,by,1,1,'rgba(255,255,255,.7)')}
+ blit();
+ btn(20,14,118,30,{icon:'back',label:'KORTET',on:false,sc:1,fn:()=>go('map')});
+ T('BUTIK',306,22,{s:4,c:'#fff',o:'#151a3c',ow:2,sh:2,b:2});
+ P(W-202,16,136,32,'rgba(14,20,46,.88)',10);b.drawImage(SPR.shell,W-192,24,18,16);T('x '+st.shells,W-166,25,{s:2});
+ soundBtn(W-56,12);
+ const bob=Math.round(Math.sin(t*1.6)*3),ox=40,oy=76+bob;
+ rr(b,ox+20,oy+78,170,3,1,'rgba(255,255,255,.45)');rr(b,ox+44,oy+86,120,2,1,'rgba(255,255,255,.3)');
+ b.drawImage(otterBack(st.otter,(t*2|0)%2),ox,oy,208,80);drawAcc(b,'back',ox,oy,4,prevWear());
+ P(20,200,272,146,'rgba(14,20,46,.92)',14);
+ if(shop.sel==null){T('TRYK PÅ EN TING',34,214,{s:2,c:YEL});wrap('SÅ KAN DU PRØVE DEN PÅ DIN ODDER OG LÆRE NOGET OM HAVET.',40).forEach((l,i)=>T(l,34,242+i*13,{c:'#e4eaff'}));
+  T('SKALLER FINDER DU, NÅR DU SPILLER BANERNE.',34,292,{c:'#9fb0e0'});hand(254,300+Math.abs(Math.sin(t*4))*-6)}
+ else{const it=ITEMS[shop.sel],own=st.owned.includes(it.id),worn=st.wear[it.slot]===it.id;
+  T(it.name,34,214,{s:2,c:YEL});T('VIDSTE DU?',34,238,{c:'#9fb0e0'});wrap(it.fact,40).slice(0,4).forEach((l,i)=>T(l,34,254+i*13,{c:'#e4eaff'}));
+  if(voiceOK()){rr(b,240,206,44,32,10,'#2c3a6c');ic('sound',248,210,2,'#fff');Z(234,200,56,44,()=>say(it.say))}
+  if(own)btn(34,306,150,30,{icon:worn?'cross':'check',label:worn?'TAG AF':'TAG PÅ',on:!worn,fn:()=>wearToggle(shop.sel)});
+  else{const can=st.shells>=it.price;btn(34,306,150,30,{spr:SPR.shell,label:'KØB  '+it.price,on:can,fn:()=>buy(shop.sel)});if(!can){b.drawImage(SPR.shell,194,313,14,12);T((it.price-st.shells)+' MERE',212,317,{c:'#c8d2f0'})}}}
+ ITEMS.forEach((it,i)=>{const x=304+(i%2)*164,y=62+(i>>1)*142,w=152,h=130,own=st.owned.includes(it.id),worn=st.wear[it.slot]===it.id,sel=shop.sel===i,can=st.shells>=it.price;
+  rr(b,x,y+4,w,h,14,'#070a1e');frame(x,y,w,h,sel?YEL:(worn?'#2e9a4a':'#3a4470'),'#1c2654',14);
+  const s=it.s;b.globalAlpha=own||can||sel?1:.55;b.drawImage(s,Math.round(x+w/2-s.width*2),Math.round(y+46-s.height*2+(sel?Math.sin(t*4)*2:0)),s.width*4,s.height*4);b.globalAlpha=1;
+  T(it.name,x+w/2,y+86,{a:'c'});
+  if(own){if(worn){rr(b,x+w/2-30,y+102,60,20,9,'#2e9a4a');ic('check',x+w/2-22,y+107,1,'#fff');T('PÅ',x+w/2-6,y+108)}else T('DIN',x+w/2,y+108,{a:'c',c:'#9fb0e0'})}
+  else{b.drawImage(SPR.shell,x+w/2-24,y+102,18,16);T(String(it.price),x+w/2,y+104,{s:2,c:can?YEL:'#8a94b8'})}
+  Z(x-4,y-4,w+8,h+10,()=>shopPick(i))});
+}
 
 /* ---------- hovedløkke ---------- */
 let last=0;
 function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;time+=dt;
  if(fadeDir){fade+=dt*4.5*fadeDir;if(fade>=1&&fadeDir===1){fade=1;scr=nextScr.s;if(nextScr.fn)nextScr.fn();nextScr=null;fadeDir=-1;onEnter(scr)}else if(fade<=0){fade=0;fadeDir=0}}
  zones=[];
- if(scr==='play'){updPlay(dt);drawPlay(time)}else if(scr==='title')drawTitle(time);else if(scr==='select')drawSelect(time);else drawMap(time);
+ if(scr==='play'){updPlay(dt);drawPlay(time)}else if(scr==='title')drawTitle(time);else if(scr==='select')drawSelect(time);else if(scr==='shop')drawShop(time);else drawMap(time);
  if(fade>0){b.fillStyle='rgba(11,16,38,'+Math.min(1,fade)+')';b.fillRect(0,0,W,H)}
  sx.imageSmoothingEnabled=false;sx.drawImage(buf,0,0,cv.width,cv.height);
  requestAnimationFrame(loop)}
