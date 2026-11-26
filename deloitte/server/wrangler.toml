@@ -1,0 +1,18 @@
+# Cloudflare Worker til topscorerlisten og landekampen i Late for the Party.
+# Deploy: Cloudflare > Workers & Pages > Create > Import a repository > rapsak5/minikurser-web,
+# root directory: deloitte/server. Eller: npx wrangler deploy fra mappen deloitte/server/.
+name = "late-for-the-party-scores"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "https://minikurser.dk"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "late-for-the-party-scores"
+database_id = "ec3bb1d8-5989-48ee-88bb-a3b5f3195a08"
+
+# Secret sættes i dashboardet (Settings > Variables and Secrets), ikke her:
+#   ADMIN_TOKEN (mindst 16 tegn). Uden den er admin slået fra.
