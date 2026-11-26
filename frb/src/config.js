@@ -1,7 +1,7 @@
 // Fælles konstanter. Alt, der skal justeres på spilfølelsen, står i TUNING.
 // Nå julefrokosten (FRB+) er en kopi af Late for the Party (Deloitte-spillet) med FRB+ tema og afdelingskamp.
 
-export const VERSION = '0.1.0';
+export const VERSION = '0.1.1';
 export const TITLE = 'Nå julefrokosten';
 
 // Spillets interne opløsning. Skaleres op til skærmen med skarpe pixels.
@@ -90,7 +90,7 @@ export function isRunner(id) { return RUNNERS.some((r) => r.id === id); }
 export function runnerId(id) { return isRunner(id) ? id : DEFAULT_RUNNER; }
 
 // Fælles topscorerliste: adressen på Cloudflare Workeren i server/worker.js. Tom = kun egne point.
-export const SCORES_URL = '';   // sættes, når Workeren frb-julespil-scores kører
+export const SCORES_URL = 'https://frb-julespil-scores.stemplerind.workers.dev';
 
 export const NAME_MAX = 12;
 export const CHECKPOINTS = true;
