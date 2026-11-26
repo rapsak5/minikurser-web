@@ -50,6 +50,9 @@ export default class SelectScene extends Phaser.Scene {
       lab.setX(Math.round(DEP_X(i) - lab.width / 2));   // hele pixels, ellers tegnes bogstaverne skævt
       this.add.zone(DEP_X(i), 248, 38, 60).setInteractive({ useHandCursor: true }).on('pointerup', () => { sfx('click'); this.pick(this.rIndex, i); });
     });
+    // Kasper som lille avatar nede i hjørnet, så man kan se, hvem spillet er fra
+    this.add.image(54, GAME_H - 2, 'avatar').setOrigin(0.5, 1).setDisplaySize(44, 52);
+    txt(this, 84, GAME_H - 16, 'EN JULEGAVE FRA KASPER', { font: 'small_o', ox: 0, tint: C.soft });
     txt(this, 30, 290, 'DINE POINT TÆLLER FOR DIN AFDELING I AFDELINGSKAMPEN.', { font: 'small', ox: 0, tint: C.soft });
 
     // højre side: dig selv

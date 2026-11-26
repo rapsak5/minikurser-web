@@ -61,7 +61,7 @@ export const DEPTH = { sky: 0, far: 1, landmark: 1.5, mid: 2, ground: 5, pit: 6,
 
 export const PROMO = {
   presents: 'En julegave fra Kasper',
-  credit: 'EN JULEGAVE FRA KASPER, DER ER PÅ BARSEL',
+  credit: 'EN JULEGAVE FRA KASPER',
   disclaimer: 'GOD JULEFROKOST 4/12',
   url: '',
 };

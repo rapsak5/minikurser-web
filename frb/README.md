@@ -1,6 +1,6 @@
 # Nå julefrokosten (FRB+)
 
-Et lille julespil til kollegerne på Campusadministrationen Frederiksberg+ (FRB+) på Københavns Universitet. En julegave fra Kasper, der er på barsel. Spil: https://minikurser.dk/frb/ (skjult for søgemaskiner, står ikke i sitemappet).
+Et lille julespil til kollegerne på Campusadministrationen Frederiksberg+ (FRB+) på Københavns Universitet. En julegave fra Kasper. Spil: https://minikurser.dk/frb/ (skjult for søgemaskiner, står ikke i sitemappet).
 
 En medarbejder i nissehue er for sent til julefrokosten på FRB+ fredag 4. december kl. 14.30. Tre verdener med tre lange baner i hver: campus (bilag), kontoret (kaffekopper) og julefrokosten (mandler). Efter campus bipper adgangskortet, efter kontoret kommer julesweateren på, og til sidst venter din plads ved bordet.
 

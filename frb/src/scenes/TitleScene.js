@@ -13,11 +13,8 @@ export default class TitleScene extends Phaser.Scene {
     this.add.image(0, 0, 'title').setOrigin(0);
     this.snow = this.add.tileSprite(0, 0, GAME_W, GAME_H, 'snow').setOrigin(0).setAlpha(0.7);
 
-    // afsenderen: Kasper som tegnet avatar med nissehue
-    panel(this, 444, 176, 184, 158, { alpha: 0.94 });
-    this.add.image(536, 330, 'avatar').setOrigin(0.5, 1).setDisplaySize(120, 140);
-    txt(this, 536, 194, 'EN JULEGAVE', { font: 'ui_o', tint: C.yellow });
-    txt(this, 536, 210, 'FRA KASPER', { font: 'ui_o', tint: C.yellow });
+    // afsenderen: Kasper som lille avatar nede i hjørnet
+    this.add.image(GAME_W - 34, GAME_H - 18, 'avatar').setOrigin(0.5, 1).setDisplaySize(48, 56);
 
     const go = () => {
       unlock();
@@ -44,7 +41,7 @@ export default class TitleScene extends Phaser.Scene {
     if (Scores.isShared()) Scores.fetchBoard().then((b) => { if (b && this.sys.isActive()) this.drawCup(b); });
 
     this.add.rectangle(GAME_W / 2, GAME_H - 9, GAME_W, 18, C.night, 0.8);
-    txt(this, 8, GAME_H - 9, PROMO.credit, { font: 'ui_o', ox: 0, tint: C.yellow });
+    txt(this, 8, GAME_H - 8, PROMO.credit, { font: 'small_o', ox: 0, tint: C.yellow });
     txt(this, GAME_W - 46, GAME_H - 8, PROMO.disclaimer, { font: 'small_o', ox: 1, tint: C.soft });
     txt(this, GAME_W - 6, GAME_H - 8, `v${VERSION}`, { font: 'small_o', ox: 1 });
   }
