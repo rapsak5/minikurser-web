@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin | Julefrokost på Amager</title>
+<style>
+  :root { --bg: #0b1224; --panel: #16203a; --line: #2a3658; --text: #e8ecf4; --soft: #9aa6c0; --gold: #f2c418; --red: #ff8a8a; --green: #8af0a0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { margin: 0 0 4px; font-size: 22px; color: var(--gold); }
+  p.sub { margin: 0 0 20px; color: var(--soft); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  label { display: block; font-size: 13px; color: var(--soft); margin-bottom: 6px; }
+  input[type=password], input[type=text] { width: 100%; max-width: 420px; padding: 9px 11px; border-radius: 7px; border: 1px solid var(--line); background: #0e1730; color: var(--text); font: inherit; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+  button { padding: 8px 14px; border-radius: 7px; border: 1px solid var(--line); background: #22305a; color: var(--text); font: inherit; cursor: pointer; }
+  button.main { background: var(--gold); color: #1a1400; border-color: var(--gold); font-weight: 600; }
+  button.small { padding: 4px 10px; font-size: 13px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tabs button.on { background: var(--gold); color: #1a1400; border-color: var(--gold); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--soft); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+  .muted { color: var(--soft); }
+  .ok { color: var(--green); }
+  .bad { color: var(--red); }
+  #msg { min-height: 22px; margin-top: 8px; }
+  .scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Admin: Julefrokost på Amager</h1>
+  <p class="sub">Topscorerlisten, afviste løb, rabatkoder og nyhedsbrevet. Kodeordet er dit ADMIN_TOKEN fra Cloudflare. Det gemmes kun i denne fane og glemmes, når du lukker den.</p>
+
+  <div class="card">
+    <label for="token">ADMIN_TOKEN</label>
+    <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="Indsæt dit kodeord">
+    <div class="row">
+      <button class="main" id="login">Log ind</button>
+      <button id="logout">Glem kodeordet</button>
+    </div>
+    <div id="msg" class="muted"></div>
+  </div>
+
+  <div class="card" id="panel" hidden>
+    <div class="tabs">
+      <button data-tab="players" class="on">Spillere</button>
+      <button data-tab="rejected">Afviste løb</button>
+      <button data-tab="codes">Rabatkoder</button>
+      <button data-tab="subs">Nyhedsbrev</button>
+    </div>
+    <div id="codefind" class="row" hidden style="margin-top:0;margin-bottom:12px">
+      <input id="codeq" type="text" placeholder="Find en kode, fx AMA-7KQ4-X9PM" style="max-width:300px">
+      <button id="codego">Find</button>
+      <button id="codeall">Vis alle</button>
+    </div>
+    <div class="scroll"><div id="out" class="muted">Henter ...</div></div>
+  </div>
+</main>
+<script type="module">
+// Banernes navne hentes fra spillet selv, så listen altid passer
+import { LEVELS as GAME_LEVELS } from './src/data/levels.js';
+(function () {
+  var API = 'https://amager-spil-scores.stemplerind.workers.dev';
+  var LEVELS = GAME_LEVELS.map(function (l) { return l.id; });
+  var NAMES = Object.fromEntries(GAME_LEVELS.map(function (l) { return [l.id, l.name]; }));
+  var $ = function (id) { return document.getElementById(id); };
+  var tab = 'players';
+
+  function getToken() { try { return sessionStorage.getItem('amager-admin') || ''; } catch (e) { return mem; } }
+  var mem = '';
+  function setToken(t) { mem = t; try { t ? sessionStorage.setItem('amager-admin', t) : sessionStorage.removeItem('amager-admin'); } catch (e) { /* kun i hukommelsen */ } }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function when(ms) { if (!ms) return ''; var d = new Date(ms); return d.toLocaleDateString('da-DK') + ' ' + d.toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }); }
+  function pts(n) { return (n | 0).toLocaleString('da-DK'); }
+  function msg(t, cls) { var m = $('msg'); m.textContent = t; m.className = cls || 'muted'; }
+
+  function call(path, body) {
+    var opt = { method: body ? 'POST' : 'GET', headers: { Authorization: 'Bearer ' + getToken() }, cache: 'no-store' };
+    if (body) { opt.headers['Content-Type'] = 'application/json'; opt.body = JSON.stringify(body); }
+    return fetch(API + path, opt).then(function (r) {
+      if (r.status === 401) throw new Error('auth');
+      return r.json();
+    });
+  }
+
+  function fail(e) {
+    if (e && e.message === 'auth') { msg('Forkert kodeord, eller ADMIN_TOKEN er ikke sat i Cloudflare endnu.', 'bad'); $('panel').hidden = true; return; }
+    msg('Kunne ikke nå serveren. Prøv igen om lidt.', 'bad');
+  }
+
+  function show(name) {
+    tab = name;
+    [].forEach.call(document.querySelectorAll('.tabs button'), function (b) { b.classList.toggle('on', b.dataset.tab === name); });
+    $('codefind').hidden = name !== 'codes';
+    $('out').innerHTML = '<span class="muted">Henter ...</span>';
+    if (name === 'players') loadPlayers();
+    else if (name === 'rejected') loadRejected();
+    else if (name === 'subs') loadSubs();
+    else loadCodes();
+  }
+
+  function loadPlayers() {
+    call('/admin/players').then(function (d) {
+      var rows = d.players || [];
+      if (!rows.length) { $('out').innerHTML = '<p class="muted">Ingen spillere endnu.</p>'; return; }
+      var h = '<table><tr><th>#</th><th>Navn</th><th class="num">Point</th><th>Nået til</th><th>Sidst</th><th>Status</th><th></th></tr>';
+      var rank = 0;
+      rows.forEach(function (p) {
+        if (!p.hidden && p.score > 0) rank++;
+        var reached = p.reached ? (p.reached >= LEVELS.length ? 'Byen' : NAMES[LEVELS[p.reached - 1]]) : 'Ikke startet';
+        h += '<tr><td class="muted">' + (!p.hidden && p.score > 0 ? rank : '') + '</td><td>' + esc(p.name) + '<br><code class="muted">' + esc(p.pid) + '</code></td>' +
+          '<td class="num">' + pts(p.score) + '</td><td>' + esc(reached) + '</td><td class="muted">' + when(p.updated) + '</td>' +
+          '<td>' + (p.hidden ? '<span class="bad">Skjult</span>' : (p.score > 0 ? '<span class="ok">På listen</span>' : '<span class="muted">Ingen point</span>')) + '</td>' +
+          '<td><button class="small" data-hide="' + esc(p.pid) + '" data-val="' + (p.hidden ? '0' : '1') + '">' + (p.hidden ? 'Vis igen' : 'Skjul') + '</button></td></tr>';
+      });
+      $('out').innerHTML = h + '</table>';
+    }).catch(fail);
+  }
+
+  function loadRejected() {
+    call('/admin/rejected').then(function (d) {
+      var rows = d.rejected || [];
+      if (!rows.length) { $('out').innerHTML = '<p class="muted">Ingen afviste løb. Godt.</p>'; return; }
+      var h = '<p class="muted">De seneste 200. Mange afvisninger fra samme spiller tyder på snyd. Skjul spilleren under Spillere.</p><table><tr><th>Hvornår</th><th>Navn</th><th>Bane</th><th class="num">Point</th><th>Grund</th></tr>';
+      rows.forEach(function (r) {
+        h += '<tr><td class="muted">' + when(r.finished) + '</td><td>' + esc(r.name || '(uden navn)') + '<br><code class="muted">' + esc(r.pid) + '</code></td>' +
+          '<td>' + esc(NAMES[r.level] || r.level) + '</td><td class="num">' + (r.score == null ? '' : pts(r.score)) + '</td><td>' + esc(r.note) + '</td></tr>';
+      });
+      $('out').innerHTML = h + '</table>';
+    }).catch(fail);
+  }
+
+  function loadCodes(one) {
+    call('/admin/codes' + (one ? '?code=' + encodeURIComponent(one) : '')).then(function (d) {
+      var rows = d.codes || [];
+      if (!rows.length) { $('out').innerHTML = '<p class="muted">' + (one ? 'Koden findes ikke.' : 'Ingen rabatkoder endnu.') + '</p>'; return; }
+      var h = '<table><tr><th>Kode</th><th>Mail</th><th>Navn</th><th>Nyhedsbrev</th><th>Lavet</th><th>Status</th><th></th></tr>';
+      rows.forEach(function (c) {
+        h += '<tr><td><code>' + esc(c.code) + '</code></td><td>' + esc(c.email) + '</td><td>' + esc(c.name) + '</td>' +
+          '<td>' + (c.newsletter ? '<span class="ok">Ja</span>' : '<span class="muted">Nej</span>') + '</td><td class="muted">' + when(c.created) + '</td>' +
+          '<td>' + (c.used ? '<span class="bad">Brugt ' + when(c.used_at) + '</span>' : '<span class="ok">Ikke brugt</span>') + '</td>' +
+          '<td><button class="small" data-code="' + esc(c.code) + '" data-used="' + (c.used ? '0' : '1') + '">' + (c.used ? 'Fortryd' : 'Markér brugt') + '</button></td></tr>';
+      });
+      $('out').innerHTML = h + '</table>';
+    }).catch(fail);
+  }
+
+  var SOURCES = { halvvejs: 'Halvvejs i spillet', hemmeligheden: 'Ved rabatkoden', spillet: 'Spillet' };
+  function loadSubs() {
+    call('/admin/subs').then(function (d) {
+      var rows = d.subs || [];
+      var waiting = rows.filter(function (r) { return !r.synced && !r.unsub; }).length;
+      var h = '<p class="muted">' + rows.length + ' tilmeldt fra spillet. ' +
+        (d.brevo ? 'Brevo er sat op.' : '<span class="bad">Brevo er ikke sat op endnu, så mailene venter her.</span>') + '</p>';
+      if (waiting && d.brevo) h += '<div class="row" style="margin:0 0 12px"><button class="main" id="syncsubs">Send ' + waiting + ' til Brevo</button></div>';
+      if (!rows.length) { $('out').innerHTML = h; bindSync(); return; }
+      h += '<table><tr><th>Mail</th><th>Hvor</th><th>Hvornår</th><th>Brevo</th><th>Seneste nummer</th></tr>';
+      rows.forEach(function (r) {
+        h += '<tr><td>' + esc(r.email) + '</td><td>' + esc(SOURCES[r.source] || r.source || '') + '</td><td class="muted">' + when(r.created) + '</td>' +
+          '<td>' + (r.unsub ? '<span class="muted">Afmeldt ' + when(r.unsub) + '</span>' : (r.synced ? '<span class="ok">På listen</span>' : '<span class="bad">Venter</span>')) + '</td>' +
+          '<td>' + (r.welcomed ? '<span class="ok">Sendt ' + when(r.welcomed) + '</span>' : '<span class="muted">Nej</span>') + '</td></tr>';
+      });
+      $('out').innerHTML = h + '</table>';
+      bindSync();
+    }).catch(fail);
+  }
+  function bindSync() {
+    var b = $('syncsubs');
+    if (!b) return;
+    b.onclick = function () {
+      b.disabled = true; b.textContent = 'Sender ...';
+      call('/admin/subs/sync', {}).then(function (r) { msg(r.synced + ' af ' + r.tried + ' sendt til Brevo.', r.synced === r.tried ? 'ok' : 'bad'); loadSubs(); }).catch(fail);
+    };
+  }
+
+  function login() {
+    var t = $('token').value.trim() || getToken();
+    if (!t) { msg('Indsæt dit kodeord først.', 'bad'); return; }
+    setToken(t);
+    msg('Logger ind ...');
+    call('/admin/players').then(function () {
+      $('token').value = '';
+      msg('Logget ind. Kodeordet glemmes, når du lukker fanen.', 'ok');
+      $('panel').hidden = false;
+      show(tab);
+    }).catch(fail);
+  }
+
+  $('login').onclick = login;
+  $('token').addEventListener('keydown', function (e) { if (e.key === 'Enter') login(); });
+  $('logout').onclick = function () { setToken(''); $('panel').hidden = true; msg('Kodeordet er glemt.'); };
+  [].forEach.call(document.querySelectorAll('.tabs button'), function (b) { b.onclick = function () { show(b.dataset.tab); }; });
+  $('codego').onclick = function () { var q = $('codeq').value.trim(); q ? loadCodes(q) : loadCodes(); };
+  $('codeq').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('codego').click(); });
+  $('codeall').onclick = function () { $('codeq').value = ''; loadCodes(); };
+
+  $('out').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    b.disabled = true;
+    if (b.dataset.hide) {
+      call('/admin/hide', { pid: b.dataset.hide, hidden: b.dataset.val === '1' }).then(loadPlayers).catch(fail);
+    } else if (b.dataset.code) {
+      var q = $('codeq').value.trim();
+      call('/admin/used', { code: b.dataset.code, used: b.dataset.used === '1' }).then(function () { q ? loadCodes(q) : loadCodes(); }).catch(fail);
+    }
+  });
+
+  if (getToken()) login();
+})();
+</script>
+</body>
+</html>
