@@ -19,12 +19,25 @@ export const BASE = { ui: 20, ui_o: 20, big_o: 20, small: 8, small_o: 8 };
 
 export function txt(scene, x, y, str, o = {}) {
   const font = o.font || 'ui_o';
-  const t = scene.add.bitmapText(x, y, font, str, BASE[font] * (o.scale || 1));
-  t.setOrigin(o.ox ?? 0.5, o.oy ?? 0.5);
+  const ox = o.ox ?? 0.5;
+  const oy = o.oy ?? 0.5;
+  const t = scene.add.bitmapText(Math.round(x), Math.round(y), font, str, BASE[font] * (o.scale || 1));
+  // Centreret tekst med ulige bredde lander på en halv pixel, og så tegnes bogstaverne skævt.
+  // Ankerpunktet rettes, så venstre kant altid står på en hel pixel, også når teksten skifter.
+  const snap = () => {
+    const w = t.width;
+    const h = t.height;
+    t.setOrigin(w ? Math.round(w * ox) / w : ox, h ? Math.round(h * oy) / h : oy);
+  };
+  const setText = t.setText.bind(t);
+  const setFontSize = t.setFontSize.bind(t);
+  t.setText = (v) => { setText(v); snap(); return t; };
+  t.setFontSize = (v) => { setFontSize(v); snap(); return t; };
   if (o.tint != null) t.setTint(o.tint);
   if (o.maxWidth) t.setMaxWidth(o.maxWidth);
   if (o.center) t.setCenterAlign();
   if (o.depth != null) t.setDepth(o.depth);
+  snap();
   return t;
 }
 

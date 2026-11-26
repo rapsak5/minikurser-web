@@ -21,6 +21,7 @@ window.__game = new Phaser.Game({
   banner: false,
   backgroundColor: '#0b1026',
   pixelArt: true,
+  roundPixels: true,   // alt på hele pixels, ellers tegnes centreret tekst skævt, når spillet skaleres på telefonen
   // Fuldskærm (Android, når man trykker START) gælder hele #game, så navnefeltet, der ligger i #game, er med i fuldskærmen.
   scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: GAME_W, height: GAME_H, fullscreenTarget: 'game' },
   physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 }, debug: false } },
