@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 560" width="480" height="560">
+  <!-- Kasper som tegnet avatar med nissehue: krøllet brunt hår, briller, overskæg, mørk blazer og hvid T-shirt. Fri fortolkning. -->
+  <defs>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cdb0"/><stop offset="1" stop-color="#eab494"/></linearGradient>
+    <linearGradient id="hat" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2343c"/><stop offset="1" stop-color="#a8141e"/></linearGradient>
+    <linearGradient id="blazer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#43434b"/><stop offset="1" stop-color="#2c2c33"/></linearGradient>
+  </defs>
+  <!-- krop -->
+  <path d="M70 560 C72 470 120 420 180 404 L300 404 C360 420 408 470 410 560 Z" fill="url(#blazer)"/>
+  <path d="M196 404 L240 470 L284 404 Z" fill="#f6f4ee"/>
+  <path d="M196 404 L240 470 L222 560 L200 560 L168 430 Z" fill="#3a3a42"/>
+  <path d="M284 404 L240 470 L258 560 L280 560 L312 430 Z" fill="#3a3a42"/>
+  <path d="M215 404 L240 440 L265 404 Z" fill="#f6f4ee"/>
+  <!-- KU-adgangskort i rød snor -->
+  <path d="M206 410 L236 500 M274 410 L244 500" stroke="#c73028" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <rect x="222" y="496" width="36" height="46" rx="5" fill="#ffffff" stroke="#c9c4ba" stroke-width="2"/>
+  <rect x="228" y="504" width="24" height="6" rx="2" fill="#901a1e"/>
+  <!-- hals -->
+  <path d="M210 360 L210 410 Q240 428 270 410 L270 360 Z" fill="#e3a98a"/>
+  <!-- ører -->
+  <ellipse cx="146" cy="276" rx="20" ry="28" fill="#eab494"/>
+  <ellipse cx="334" cy="276" rx="20" ry="28" fill="#eab494"/>
+  <!-- hoved -->
+  <path d="M150 230 C150 160 330 160 330 230 L330 300 C330 360 290 392 240 392 C190 392 150 360 150 300 Z" fill="url(#skin)"/>
+  <!-- krøllet hår under huen -->
+  <g fill="#6b4a2e">
+    <circle cx="160" cy="214" r="22"/><circle cx="186" cy="198" r="22"/><circle cx="214" cy="192" r="21"/>
+    <circle cx="244" cy="190" r="22"/><circle cx="274" cy="194" r="21"/><circle cx="300" cy="202" r="21"/>
+    <circle cx="322" cy="218" r="20"/><circle cx="152" cy="240" r="15"/><circle cx="330" cy="242" r="14"/>
+  </g>
+  <g fill="#94693f">
+    <circle cx="180" cy="200" r="8"/><circle cx="232" cy="188" r="8"/><circle cx="286" cy="196" r="7"/><circle cx="314" cy="214" r="6"/>
+  </g>
+  <!-- nissehue -->
+  <g transform="translate(0,-18)">
+    <path d="M330 130 L394 192 L344 196 Z" fill="#8a1018"/>
+    <path d="M138 196 C150 100 250 40 352 82 C392 98 412 140 418 196 L376 200 C370 160 350 134 320 126 C340 150 344 176 340 196 Z" fill="url(#hat)"/>
+    <circle cx="420" cy="206" r="28" fill="#ffffff"/>
+    <circle cx="412" cy="198" r="10" fill="#f2f0ea"/>
+    <rect x="126" y="180" width="232" height="42" rx="21" fill="#ffffff"/>
+    <path d="M140 196 Q240 186 344 196" stroke="#e6e2da" stroke-width="6" fill="none"/>
+  </g>
+  <!-- krøller, der titter frem under huen -->
+  <g fill="#6b4a2e">
+    <circle cx="166" cy="216" r="16"/><circle cx="196" cy="212" r="14"/><circle cx="226" cy="210" r="13"/>
+    <circle cx="256" cy="210" r="13"/><circle cx="286" cy="212" r="14"/><circle cx="316" cy="216" r="16"/>
+    <circle cx="154" cy="244" r="13"/><circle cx="328" cy="244" r="13"/>
+  </g>
+  <g fill="#94693f"><circle cx="196" cy="208" r="5"/><circle cx="256" cy="206" r="5"/><circle cx="314" cy="212" r="5"/></g>
+  <!-- bryn -->
+  <path d="M178 254 Q198 242 220 252" stroke="#5a3a22" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M260 252 Q282 242 302 254" stroke="#5a3a22" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <!-- øjne -->
+  <ellipse cx="200" cy="280" rx="9" ry="10" fill="#2a3a44"/><ellipse cx="280" cy="280" rx="9" ry="10" fill="#2a3a44"/>
+  <circle cx="203" cy="276" r="3" fill="#ffffff"/><circle cx="283" cy="276" r="3" fill="#ffffff"/>
+  <!-- briller -->
+  <g fill="none" stroke="#24242b" stroke-width="8">
+    <rect x="166" y="256" width="66" height="50" rx="14"/>
+    <rect x="248" y="256" width="66" height="50" rx="14"/>
+    <path d="M232 276 Q240 270 248 276"/>
+    <path d="M166 272 L150 268 M314 272 L330 268"/>
+  </g>
+  <!-- næse, kinder, overskæg og smil -->
+  <path d="M240 290 Q232 316 238 324 Q246 328 252 322" stroke="#cf8f70" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="182" cy="324" rx="16" ry="10" fill="#f0a08c" opacity="0.5"/>
+  <ellipse cx="298" cy="324" rx="16" ry="10" fill="#f0a08c" opacity="0.5"/>
+  <path d="M200 342 C214 328 232 330 240 338 C248 330 266 328 280 342 C266 348 252 346 240 342 C228 346 214 348 200 342 Z" fill="#6b4a2e"/>
+  <path d="M214 352 Q240 372 266 352" stroke="#8a3a3a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- skægstubbe -->
+  <path d="M180 340 Q240 404 300 340" stroke="#c89a7a" stroke-width="3" fill="none" stroke-dasharray="2 7" opacity="0.6"/>
+</svg>

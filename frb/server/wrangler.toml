@@ -1,0 +1,18 @@
+# Cloudflare Worker til topscorerlisten og afdelingskampen i Nå julefrokosten (FRB+).
+# Deploy: Cloudflare > Workers & Pages > Create > Import a repository > rapsak5/minikurser-web,
+# root directory: frb/server. Eller: npx wrangler deploy fra mappen frb/server/.
+name = "frb-julespil-scores"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "https://minikurser.dk"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "frb-julespil-scores"
+database_id = "MANGLER"   # sættes, når databasen er oprettet
+
+# Secret sættes i dashboardet (Settings > Variables and Secrets), ikke her:
+#   ADMIN_TOKEN (mindst 16 tegn). Uden den er admin slået fra.

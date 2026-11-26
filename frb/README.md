@@ -1,0 +1,14 @@
+# Nå julefrokosten (FRB+)
+
+Et lille julespil til kollegerne på Campusadministrationen Frederiksberg+ (FRB+) på Københavns Universitet. En julegave fra Kasper, der er på barsel. Spil: https://minikurser.dk/frb/ (skjult for søgemaskiner, står ikke i sitemappet).
+
+En medarbejder i nissehue er for sent til julefrokosten på FRB+ fredag 4. december kl. 14.30. Tre verdener med tre lange baner i hver: campus (bilag), kontoret (kaffekopper) og julefrokosten (mandler). Efter campus bipper adgangskortet, efter kontoret kommer julesweateren på, og til sidst venter din plads ved bordet.
+
+- Spillet er en kopi af Late for the Party (mappen `deloitte`, Deloitte-spillet), som bygger på motoren fra Julefrokost på Amager: Phaser 4.2.1 i almindelig JavaScript uden build-trin, 640x360 med skarpe pixels. Start i `index.html`.
+- Styring: swipe op er hop, swipe ned er slide, tap er "Undskyld!" (flytter cyklister, printere, stole, tjenere og snemænd). Ladcykler, hunde, skriveborde, kolleger og langdansen flytter sig ikke: hop over dem.
+- Tjek ind: navn, en af fem løbere og en af otte afdelinger: Bygninger, Forskningsfinansiering, HR, IT-support, Kommunikation, Uddannelse, Økonomi og Resten af KU. Afdelingen tæller i afdelingskampen (gennemsnittet af de 10 bedste i hver afdeling, `CUP_TOP` i `src/config.js`). Internt hedder feltet stadig `country`, så server og kode er de samme som i Deloitte-spillet.
+- Uret: starter 14:00, hver bane tager 3 minutter, og hvert tabt julehjerte koster 20 sekunder. Når man julefrokosten senest 14:30, giver det 5.000 point plus 1.000 for hver 20 sekunder, man er foran (`CLOCK` i `src/config.js`).
+- Banerne er de samme som i Deloitte-spillet, så pointgrænserne i serveren gælder stadig. Navne og beskeder står i `src/data/levels.js`, hvordan tingene ser ud i `src/data/entities.js`.
+- Grafikken tegnes i kode: `python3 tools/build_assets.py` (bruger `tools/px.py` og `tools/frb_art.py`, kræver Pillow). `frb_art.py` har det, der er nyt i FRB+ udgaven: Kasper som pixelfigur med baby i bæresele, afdelingsikonerne, hovedbygningen på Bülowsvej (frit tegnet), kaffekop, mandel, døren med kortlæser og din plads ved bordet. KU's logo er varemærkebeskyttet og er ikke brugt. Kun KU-rød (#901A1E) og teksten FRB+.
+- Test: `node tools/test_play.cjs` lader en robot spille alle ni baner, `node tools/test_flow.cjs` tester menuer og styring med rigtige berøringer, `node --experimental-sqlite tools/test_server.mjs` tester serveren. De to første kræver `npm i puppeteer-core` og en Chrome.
+- Topscorerlisten og afdelingskampen: Cloudflare Worker i `server/worker.js` med D1-databasen `frb-julespil-scores` bundet som `DB`. Deploy: Cloudflare > Workers & Pages > Create > Import a repository > rapsak5/minikurser-web, root directory `frb/server`. Skriv databasens id i `server/wrangler.toml` og adressen i `SCORES_URL` i `src/config.js`. Indtil serveren kører, viser spillet kun spillerens egne point.
