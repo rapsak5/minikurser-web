@@ -12,7 +12,7 @@ ALLOWED_ORIGIN = "https://minikurser.dk"
 [[d1_databases]]
 binding = "DB"
 database_name = "frb-julespil-scores"
-database_id = "MANGLER"   # sættes, når databasen er oprettet
+database_id = "04e9bc2a-78b9-4565-a1da-e937b9426056"
 
 # Secret sættes i dashboardet (Settings > Variables and Secrets), ikke her:
 #   ADMIN_TOKEN (mindst 16 tegn). Uden den er admin slået fra.
