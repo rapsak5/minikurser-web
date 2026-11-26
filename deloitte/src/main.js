@@ -21,7 +21,8 @@ window.__game = new Phaser.Game({
   banner: false,
   backgroundColor: '#0b1026',
   pixelArt: true,
-  scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: GAME_W, height: GAME_H },
+  // Fuldskærm (Android, når man trykker START) gælder hele #game, så navnefeltet, der ligger i #game, er med i fuldskærmen.
+  scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: GAME_W, height: GAME_H, fullscreenTarget: 'game' },
   physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 }, debug: false } },
   input: { activePointers: 3 },
   // Rækkefølgen bestemmer, hvad der tegnes øverst: HUD og overlays ligger efter banen.

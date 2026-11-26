@@ -77,3 +77,11 @@ export function pad(n, len = 6) { return String(Math.max(0, Math.floor(n))).padS
 export function dim(scene, alpha = 0.6) {
   return scene.add.rectangle(0, 0, scene.scale.width, scene.scale.height, C.night, alpha).setOrigin(0);
 }
+
+/**
+ * Hvor HTML-felter oven på spillet skal ligge: inde i det element, der er i fuldskærm, ellers i #game.
+ * Et felt uden for fuldskærmen er usynligt og kan ikke trykkes på, så mobilens tastatur kommer aldrig op.
+ */
+export function overlayRoot() {
+  return document.fullscreenElement || document.webkitFullscreenElement || document.getElementById('game') || document.body;
+}

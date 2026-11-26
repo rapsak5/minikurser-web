@@ -5,7 +5,7 @@
 // virker som normalt. Det flyttes med, når spillet skaleres.
 
 import { GAME_W, GAME_H, NAME_MAX, RUNNERS, COUNTRIES, DEFAULT_COUNTRY, runnerId, isCountry } from '../config.js';
-import { txt, panel, button, C } from '../game/ui.js';
+import { txt, panel, button, C, overlayRoot } from '../game/ui.js';
 import * as Save from '../systems/save.js';
 import * as Scores from '../systems/scores.js';
 import { checkName, cleanName, liveName } from '../systems/names.js';
@@ -45,7 +45,8 @@ export default class SelectScene extends Phaser.Scene {
     COUNTRIES.forEach((c, i) => {
       this.add.rectangle(CELL_X(i), 248, 54, 56, C.panel);
       this.add.image(CELL_X(i), 242, 'atlas', `flag/${c.id}`).setScale(1.5);
-      txt(this, CELL_X(i), 266, c.id, { font: 'small_o' });
+      const lab = txt(this, CELL_X(i), 266, c.id, { font: 'small_o', ox: 0 });
+      lab.setX(Math.round(CELL_X(i) - lab.width / 2));   // hele pixels, ellers tegnes bogstaverne skævt
       this.add.zone(CELL_X(i), 248, 60, 60).setInteractive({ useHandCursor: true }).on('pointerup', () => { sfx('click'); this.pick(this.rIndex, i); });
     });
     txt(this, 30, 290, 'YOUR POINTS COUNT FOR YOUR COUNTRY IN THE COUNTRY CUP.', { font: 'small', ox: 0, tint: C.soft });
@@ -99,12 +100,20 @@ export default class SelectScene extends Phaser.Scene {
       if (el.value !== live) el.value = live;
       this.refreshName();
     });
-    document.body.appendChild(el);
+    overlayRoot().appendChild(el);
     this.field = el;
     this.place = () => this.placeField();
+    // går spillet i eller ud af fuldskærm, flyttes feltet med, så det stadig kan trykkes på
+    this.onFullscreen = () => {
+      const root = overlayRoot();
+      if (this.field && this.field.parentNode !== root) root.appendChild(this.field);
+      this.placeField();
+    };
     this.scale.on('resize', this.place);
     window.addEventListener('resize', this.place);
     window.visualViewport?.addEventListener('resize', this.place);
+    document.addEventListener('fullscreenchange', this.onFullscreen);
+    document.addEventListener('webkitfullscreenchange', this.onFullscreen);
     this.placeField();
     if (!el.value && this.sys.game.device.os.desktop) setTimeout(() => el.focus(), 50);
   }
@@ -126,6 +135,8 @@ export default class SelectScene extends Phaser.Scene {
     this.scale.off('resize', this.place);
     window.removeEventListener('resize', this.place);
     window.visualViewport?.removeEventListener('resize', this.place);
+    document.removeEventListener('fullscreenchange', this.onFullscreen);
+    document.removeEventListener('webkitfullscreenchange', this.onFullscreen);
     this.field.remove();
     this.field = null;
   }
